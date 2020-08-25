@@ -1,7 +1,11 @@
 package com.test.app.gui;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
+import com.test.app.bl.Withdraw;
+import com.test.app.bl.login;
+import com.test.app.bl.profile;
 import com.test.app.dal.Database;
 
 public class mainMenu {
@@ -9,12 +13,12 @@ public class mainMenu {
     public static Scanner input = new Scanner(System.in);
     public static Database db = new Database();
 
-    public static void login() {
+    public static void first_login() throws SQLException {
         String choice;
         String AccountNumber;
         String password;
         int login;
-        Scanner input = new Scanner(System.in);
+        login lg = new login();
 
         System.out.println("---------------------------------------------------------------------");
         System.out.println("Chào mừng đến với Ngân Hàng đầu tư và phát triển Bốc Bát Họ Bank (BBH)");
@@ -23,19 +27,12 @@ public class mainMenu {
         AccountNumber = input.nextLine();
         System.out.println("Nhập password");
         password = input.nextLine();
+        lg.log(AccountNumber, password);
+        menu_transaction();
 
-        login = db.login(AccountNumber, password);
-        if (login == 1) {
-            System.out.println("Đăng nhập thành công!");
-            ID_login_now = db.getID(AccountNumber);
-            menu_transaction(ID_login_now);
-
-        } else {
-            System.out.println("Lỗi!, tài khoản không tồn tại, hoặc sai mật khẩu...");
-        }
     }
 
-    public static void menu_transaction(int ID_login_now) {
+    public static void menu_transaction() throws SQLException {
         String choice;
         System.out.println("---------------------------------------------------------------------");
         System.out.println("1.Thông tin tài khoản");
@@ -47,10 +44,12 @@ public class mainMenu {
         choice = input.nextLine();
         switch (choice) {
             case "1":
-                profile();
+                profile pr = new profile();  
+                pr.log();
                 break;
             case "2":
-                withdraw();
+                Withdraw wd = new Withdraw();
+                wd.run();
                 break;
             case "3":
 
@@ -65,26 +64,8 @@ public class mainMenu {
 
     }
 
-    public static void profile() {
-        db.getInfoByID(ID_login_now);
+    
 
-    }
-
-    public static void withdraw() {
-        int money_for_withdraw;
-        int balance;
-        System.out.println("Mời nhập số tiền muốn rút: ");
-        money_for_withdraw = input.nextInt();
-        balance = db.getBalance(ID_login_now);
-        if (balance > 50000 && money_for_withdraw<balance) {
-            db.trade(ID_login_now, money_for_withdraw, "W");
-        }
-        else{
-            System.out.println("Đéo có chuyện đấy đâu!");
-        }
-        System.out.println("Số dư hiện tại:");
-        System.out.println(db.getBalance(ID_login_now));
-
-    }
+    
 
 }
