@@ -217,15 +217,111 @@ public class Database {
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {//nếu có dữ liệu
 				
-					System.out.println("Số tài khoản: " + rs.getString("AccountNumber"));
+					System.out.println("ID tài khoản: " + rs.getString("AccountNumber"));
 					System.out.println("Tên chủ tài khoản: "+ rs.getString("AccountName"));
-					System.out.println("Số dư hiện tại: "+rs.getString("balance"));
+					System.out.println("Số điện thoại: "+rs.getString("Phone"));
+
 					
 			}
 						
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	public int checkAccountNumber(String accountNumber) {
+		try {
+			
+			ps = conn.prepareCall("{call checkAccountNumber(?)}");	
+			ps.setString(1, accountNumber);					
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {//nếu có dữ liệu
+				return rs.getInt("result");
+					
+			}
+			return -2;
+						
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -3;
+		}
+	}
+
+	public String getNameToACTN(String accountNumber) { //ra name theo account number phục vụ việc login ban đầu
+		try {
+			
+			ps = conn.prepareCall("{call getNameToACTN(?)}");	
+			ps.setString(1, accountNumber);					
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {//nếu có dữ liệu
+				return rs.getString("AccountName");
+					
+			}
+			return "";
+						
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "";
+
+		}
+	}
+	public int lockAccount(String accountNumber) {
+		try {
+			
+			ps = conn.prepareCall("{call lockAccount(?)}");	
+			ps.setString(1, accountNumber);					
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {//nếu có dữ liệu
+				return rs.getInt("result");
+					
+			}
+			return -2;
+						
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -3;
+		}
+	}
+
+	public int checkActive(String accountNumber) {
+		try {
+			
+			ps = conn.prepareCall("{call checkActive(?)}");	
+			ps.setString(1, accountNumber);					
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {//nếu có dữ liệu
+				return rs.getInt("result");
+					
+			}
+			return -2;
+						
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -3;
+		}
+	}
+
+	public String checkPassfromID(int ID) {
+		try {
+			
+			ps = conn.prepareCall("{call checkPassfromID(?)}");	
+			ps.setInt(1, ID);					
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {//nếu có dữ liệu
+				return rs.getString("result");
+					
+			}
+			return "";
+						
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "";
 		}
 	}
 
