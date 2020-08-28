@@ -6,9 +6,10 @@ import com.test.app.dal.Database;
 import com.test.app.gui.mainMenu;
 
 public class App {
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) throws SQLException, InterruptedException {
 		mainMenu.first_login();
 		// Database db = new Database();
+		// db.GetHistoryTrade(1);
 
 
 		

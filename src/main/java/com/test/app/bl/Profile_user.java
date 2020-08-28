@@ -9,6 +9,7 @@ import com.test.app.dal.Database;
 public class Profile_user extends General {
     Database db = new Database();
 
+    
     public void info() throws SQLException {
 
         db.getInfoByID(getID_login_now());
@@ -30,5 +31,18 @@ public class Profile_user extends General {
     {
         return db.checkPassfromID(getID_login_now());
     }
+
+    public void History_trade(){
+        db.GetHistoryTrade(getID_login_now());
+    }
+
+    public int get_type_account(int id){
+        return db.getAccountTypeID(id);
+    }
+    public void set_type_account(int id){
+        TypeAccount tp = new TypeAccount();
+        tp.set_type_account(getID_login_now());
+    }
+
     
 }

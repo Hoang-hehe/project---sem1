@@ -9,11 +9,13 @@ public class Login_user extends General {
      int login;
     private int countLogin = 0;
 
-    public boolean session_login(String AccountNumber, String password) {
+    public boolean session_login(String AccountNumber, String password) throws InterruptedException {
         login = db.login(AccountNumber, password);
         if (login == 1) {
             System.out.println("Đăng nhập thành công!");
             setID_login_now(db.getID(AccountNumber));
+            Thread.sleep(1000);
+            // clrscr();
             return true;
 
         } else {

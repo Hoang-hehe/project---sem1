@@ -17,7 +17,9 @@ public class mainMenu extends General {
     public static Valid valid = new Valid();
     public static Database db = new Database();
 
-    public static void first_login() throws SQLException {
+    public static void first_login() throws SQLException, InterruptedException {
+        clrscr();
+
         boolean loop = false;
         boolean loop2 = false;
         String AccountNumber = "";
@@ -32,6 +34,7 @@ public class mainMenu extends General {
             System.out.println("Nhập ID: ");
             AccountNumber = input.nextLine();
             if (lg.first_log(AccountNumber) == 1) {
+                clrscr();
                 System.out.println("---------------------------------------------------------------------");
                 System.out.println("Chào mừng bạn trở lại: " + lg.getName(AccountNumber));
                 if (lg.checkActive(AccountNumber) == 0) {
@@ -43,7 +46,9 @@ public class mainMenu extends General {
                 System.out.println("---------------------------------------------------------------------");
                 loop = true;
             } else {
-                System.out.println("Không phát hiện ID trong hệ thống! Mời nhập lại");
+                System.out.println("Không phát hiện ID trong hệ thống! Mời nhập lại(enter để tiếp tục)");
+                input.nextLine();
+                clrscr();
                 loop = false;
             }
 
@@ -52,6 +57,7 @@ public class mainMenu extends General {
             password = hide_pass();
             loop2 = lg.session_login(AccountNumber, password);
             if (loop2 == false) {
+                clrscr();
                 System.out.println("Số lần nhập sai: " + lg.getCountLogin());
                 if (lg.getCountLogin() > 3) {
                     System.out.println("Bạn đã bị khoá mẹ tài khoản, hack với chúng tôi à?");
@@ -62,18 +68,24 @@ public class mainMenu extends General {
             System.out.println("---------------------------------------------------------------------");
 
         }
+        clrscr();
 
         menu_transaction();
 
     }
 
-    public static void updateInfo() {
+    public static void choice_profile() {
         String choice;
+
         System.out.println("---------------------------------------------------------------------");
-        System.out.println("Cập nhật mật khẩu(y/n)");
+        System.out.println("1. Cập nhật mật khẩu");
+        System.out.println("2. Xem lịch sử giao dịch");
+        System.out.println("3. Menu chính");
+        System.out.println("#Chọn:");
         choice = input.nextLine();
         switch (choice) {
-            case "y":
+            case "1":
+                clrscr();
                 String new_pass = "";
                 String old_pass = "";
                 Profile_user pr = new Profile_user();
@@ -97,16 +109,25 @@ public class mainMenu extends General {
                 }
 
                 break;
-            case "n":
+            case "2":
+                clrscr();
+                System.out.println("Thời gian |Loại giao dịch|Số tiền");
+                db.GetHistoryTrade(getID_login_now());
+                break;
+            case "3":
                 break;
             default:
                 break;
+
         }
     }
 
+    
+
     public static void menu_transaction() throws SQLException {
         while (true) {
-
+            Profile_user pr = new Profile_user();
+ 
             String choice;
             System.out.println("---------------------------------------------------------------------");
             System.out.println("1.Thông tin tài khoản");
@@ -119,11 +140,32 @@ public class mainMenu extends General {
             choice = input.nextLine();
             switch (choice) {
                 case "1":
-                    Profile_user pr = new Profile_user();
+                    clrscr();
+                    pr.set_type_account(getID_login_now());
                     pr.info();
-                    updateInfo();
+                    System.out.println("loại account: " + db.getAccountTypeID(getID_login_now()));
+                    if (pr.get_type_account(getID_login_now()) == 1) {
+                        System.out.println("Cấp độ tài khoản: Vàng");
+                        System.out.println(
+                                "Ưu đãi: Được giao dịch tối đa 10tr/lần, có thể giao dịch tối đa 100tr/ngày, miễn phí khi giao dịch chuyển tiền");
+                    } else if (pr.get_type_account(getID_login_now()) == 2) {
+                        System.out.println("Cấp độ tài khoản: Bạc");
+                        System.out.println("Cần thêm " + format_money(50000000 - db.getBalance(getID_login_now()))
+                                + " để nâng lên cấp độ Vàng");
+                        System.out.println(
+                                "Uu đãi cấp độ Bạc: Được giao dịch tối đa 5tr/lần, có thể giao dịch tối đa 50tr/ngày");
+                    } else if (pr.get_type_account(getID_login_now()) == 3) {
+                        System.out.println("Cấp độ tài khoản: Đồng");
+                        System.out.println("Cần thêm " + format_money(20000000 - db.getBalance(getID_login_now()))
+                                + " để nâng lên cấp độ Bạc và nhận thêm ưu đãi ");
+                    }
+                    choice_profile();
+
                     break;
                 case "2":
+                    clrscr();
+                    System.out.println("Mời bạn nhập số tiền muốn rút: ");
+
                     Withdraw wd = new Withdraw();
                     wd.run();
                     break;

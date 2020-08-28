@@ -11,10 +11,9 @@ public class Withdraw extends General {
         System.out.println("Mời nhập số tiền muốn rút: ");
         money_for_withdraw = input.nextInt();
         balance = db.getBalance(getID_login_now());
-        if (balance > 50000 && money_for_withdraw<balance) {
+        if (balance > 50000 && money_for_withdraw < balance && money_for_withdraw > 0) {
             db.trade(getID_login_now(), money_for_withdraw, "W");
-        }
-        else{
+        } else {
             System.out.println("Đéo có chuyện đấy đâu!");
         }
         System.out.println("Số dư hiện tại:");
