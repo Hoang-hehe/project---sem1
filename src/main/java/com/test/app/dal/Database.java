@@ -1,10 +1,13 @@
 package com.test.app.dal;
 
+import java.util.Date;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 public class Database {
 
@@ -49,7 +52,6 @@ public class Database {
 			ps.setInt(2, type);
 
 			ResultSet rs = ps.executeQuery();
-			
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -67,10 +69,9 @@ public class Database {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				return rs.getInt("result");
-				
+
 			}
 			return -2;
-			
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -112,6 +113,32 @@ public class Database {
 			while (rs.next()) {// nếu có dữ liệu
 				System.out.println(
 						rs.getDate("trade_date") + "|" + rs.getString("type_trade") + "|" + rs.getString("amount"));
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+	}
+
+	public void getTrade_date_recent(int accId) {
+		try {
+
+			ps = conn.prepareCall("{call getTrade_date_recent(?)}");
+			// truyền giá trị cho các tham sô
+			ps.setInt(1, accId);
+			Date date = new Date();
+			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+			formatter = new SimpleDateFormat("dd-M-yyyy");
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {// nếu có dữ liệu
+				System.out.println("Loại giao dịch: " + rs.getString("type_trade") + "\n" + "Số giao dịch: "
+						+ rs.getInt("Trade_History_id") + "\n" + "Thời gian giao dịch: " + formatter.format(rs.getDate("trade_date"))
+						+ "\n" + "Số tiền giao dịch: " + rs.getInt("amount"));
+
 			}
 
 		} catch (SQLException e) {

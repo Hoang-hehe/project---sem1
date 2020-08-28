@@ -7,13 +7,12 @@ public class TypeAccount extends General {
     int balance = db.getBalance(getID_login_now());
 
     public void set_type_account(int id) {
-
-        if (balance < 5000000) {
-            db.setAccountType(id, 3);
-        } else if (balance > 5000000 && balance < 20000000) {
-            db.setAccountType(id, 2);
-        } else if (balance > 50000000) {
+        if (balance >= 50000000) {
             db.setAccountType(id, 1);
+        } else if (balance >= 2000000 && balance < 50000000) {
+            db.setAccountType(id, 2);
+        } else if (balance < 20000000) {
+            db.setAccountType(id, 3);
         }
     }
 

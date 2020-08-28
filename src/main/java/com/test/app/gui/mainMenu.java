@@ -74,60 +74,152 @@ public class mainMenu extends General {
 
     }
 
-    public static void choice_profile() {
+    public static void choice_profile() throws SQLException, InterruptedException {
         String choice;
+        while (true) {
 
-        System.out.println("---------------------------------------------------------------------");
-        System.out.println("1. Cập nhật mật khẩu");
-        System.out.println("2. Xem lịch sử giao dịch");
-        System.out.println("3. Menu chính");
-        System.out.println("#Chọn:");
-        choice = input.nextLine();
-        switch (choice) {
-            case "1":
-                clrscr();
-                String new_pass = "";
-                String old_pass = "";
-                Profile_user pr = new Profile_user();
-                System.out.println("Mời nhập mật khẩu cũ:");
-                old_pass = input.nextLine(); // check mật khẩu cũ
-                if (old_pass.equals(pr.checkPassFromID((getID_login_now())))) {
+            System.out.println("---------------------------------------------------------------------");
+            System.out.println("1. Cập nhật mật khẩu");
+            System.out.println("2. Xem lịch sử giao dịch");
+            System.out.println("3. Menu chính");
+            System.out.println("#Chọn:");
+            choice = input.nextLine();
+            switch (choice) {
+                case "1":
+                    clrscr();
+                    String new_pass = "";
+                    String old_pass = "";
+                    Profile_user pr = new Profile_user();
+                    System.out.println("Mời nhập mật khẩu cũ:");
+                    old_pass = input.nextLine(); // check mật khẩu cũ
+                    if (old_pass.equals(pr.checkPassFromID((getID_login_now())))) {
 
-                    System.out.println("Mời nhập mật khẩu mới:");
-                    while (true) {
-                        new_pass = input.nextLine();
-                        if (valid.validate(new_pass) == true) {
-                            pr.update(new_pass);
+                        System.out.println("Mời nhập mật khẩu mới:");
+                        while (true) {
+                            new_pass = input.nextLine();
+                            if (valid.validate(new_pass) == true) {
+                                pr.update(new_pass);
+                                System.out.println(choice);
+                            } else {
+                                System.out.println("Không hợp lệ!");
+                                input.nextLine();
+                            }
                             break;
-                        } else {
-                            System.out.println("Không hợp lệ, nhập lại:");
                         }
+                    } else {
+                        System.out.println("Nhập sai mật khẩu cũ...");
+                        input.nextLine();
                     }
-                } else {
-                    System.out.println("Nhập sai mật khẩu cũ...");
+                    clrscr();
                     break;
-                }
+                case "2":
+                    System.out.println("Thời gian |Loại giao dịch|Số tiền");
+                    db.GetHistoryTrade(getID_login_now());
+                    input.nextLine();
+                    break;
+                case "3":
+                    menu_transaction();
+                    break;
+                default:
+                    break;
 
-                break;
-            case "2":
-                clrscr();
-                System.out.println("Thời gian |Loại giao dịch|Số tiền");
-                db.GetHistoryTrade(getID_login_now());
-                break;
-            case "3":
-                break;
-            default:
-                break;
+            }
 
         }
     }
 
-    
-
-    public static void menu_transaction() throws SQLException {
+    public static void withdraw() throws SQLException, InterruptedException {
+        String choice = "";
+        // int balance = db.getBalance(getID_login_now());
+        int money_want_withdraw = 0;
+        Withdraw wd = new Withdraw();
         while (true) {
+            clrscr();
+            int balance = db.getBalance(getID_login_now());
+            System.out.println("Số dư: " + format_money(balance));
+            System.out.println("---------------------------------------------------------------------");
+            System.out.println("1. 500.000đ");
+            System.out.println("2. 1.000.000đ");
+            System.out.println("3. 2.000.000đ");
+            System.out.println("4. 5.000.000đ");
+            System.out.println("5. Số khác ( Bội số của 10.000 )");
+            System.out.println("6. Main menu");
+            System.out.println("---------------------------------------------------------------------");
+            System.out.println("#chọn: ");
+            choice = input.nextLine();
+            switch (choice) {
+                case "1":
+                    money_want_withdraw = 500000;
+                    if (wd.run(money_want_withdraw + 1100) == 1) {
+                        System.out.println("Rút thành công!");
+                        Thread.sleep(1000);
+                        Invoice.before(getID_login_now());
+                        input.nextLine();
+                    } else {
+                        System.out.println("Tài khoản không đủ số dư khả dụng");
+                        Thread.sleep(1000);
+                    }
+                    break;
+                case "2":
+                    money_want_withdraw = 1000000;
+                    if (wd.run(money_want_withdraw + 1100) == 1) {
+                        System.out.println("Rút thành công!");
+                        Thread.sleep(1000);
+                    } else {
+                        System.out.println("Lỗi! số tiền rút không khả dụng");
+                        Thread.sleep(1000);
+                    }
+                    break;
+                case "3":
+                    money_want_withdraw = 2000000;
+                    if (wd.run(money_want_withdraw + 1100) == 1) {
+                        System.out.println("Rút thành công!");
+                        Thread.sleep(1000);
+                    } else {
+                        System.out.println("Lỗi! số tiền rút không khả dụng");
+                        Thread.sleep(1000);
+                    }
+                    break;
+                case "4":
+                    money_want_withdraw = 5000000;
+                    if (wd.run(money_want_withdraw + 1100) == 1) {
+                        System.out.println("Rút thành công!");
+                        Thread.sleep(1000);
+                    } else {
+                        System.out.println("Lỗi! số tiền rút không khả dụng");
+                        Thread.sleep(1000);
+                    }
+                    break;
+                case "5":
+                    clrscr();
+                    System.out.println("Mời nhập số tiền muốn rút (bội số của 100.000)");
+                    money_want_withdraw = input.nextInt();
+                    if (money_want_withdraw % 100000 == 0 && wd.run(money_want_withdraw + 1100) == 1) {
+                        System.out.println("Rút thành công");
+                        Thread.sleep(1000);
+                    } else {
+                        System.out.println("Lỗi! số tiền rút không khả dụng");
+                        Thread.sleep(1000);
+                    }
+
+                    break;
+                case "6":
+                    menu_transaction();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+    }
+
+    public static void menu_transaction() throws SQLException, InterruptedException {
+
+        while (true) {
+            clrscr();
             Profile_user pr = new Profile_user();
- 
+
             String choice;
             System.out.println("---------------------------------------------------------------------");
             System.out.println("1.Thông tin tài khoản");
@@ -150,6 +242,9 @@ public class mainMenu extends General {
                                 "Ưu đãi: Được giao dịch tối đa 10tr/lần, có thể giao dịch tối đa 100tr/ngày, miễn phí khi giao dịch chuyển tiền");
                     } else if (pr.get_type_account(getID_login_now()) == 2) {
                         System.out.println("Cấp độ tài khoản: Bạc");
+                        // if (db.getBalance(getID_login_now())>20000000) {
+
+                        // }
                         System.out.println("Cần thêm " + format_money(50000000 - db.getBalance(getID_login_now()))
                                 + " để nâng lên cấp độ Vàng");
                         System.out.println(
@@ -164,10 +259,7 @@ public class mainMenu extends General {
                     break;
                 case "2":
                     clrscr();
-                    System.out.println("Mời bạn nhập số tiền muốn rút: ");
-
-                    Withdraw wd = new Withdraw();
-                    wd.run();
+                    withdraw();
                     break;
                 case "3":
 
