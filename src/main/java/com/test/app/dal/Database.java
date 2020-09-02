@@ -1,12 +1,13 @@
 package com.test.app.dal;
 
 import java.util.Date;
+import java.util.Locale;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 public class Database {
@@ -23,12 +24,12 @@ public class Database {
 		}
 	}
 
-	public int trade(int userId, int amount, String trade_tye) {// hàm giao dịch
+	public int trade(int userId, Long amount, String trade_tye) {// hàm giao dịch
 		try {
 
 			ps = conn.prepareCall("{call trade(?,?,?)}");
 			ps.setInt(1, userId);
-			ps.setInt(2, amount);
+			ps.setLong(2, amount);
 			ps.setString(3, trade_tye);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {// nếu có dữ liệu
@@ -81,7 +82,7 @@ public class Database {
 	}
 
 	// hàm tính số dư của tài khoản có id là userId
-	public int getBalance(int userId) {
+	public long getBalance(int userId) {
 		try {
 
 			ps = conn.prepareCall("{call getBalance(?)}");
@@ -90,7 +91,7 @@ public class Database {
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {// nếu có dữ liệu
-				return rs.getInt("balance");
+				return rs.getLong("balance");
 			}
 			return -1;
 
@@ -112,7 +113,7 @@ public class Database {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {// nếu có dữ liệu
 				System.out.println(
-						rs.getDate("trade_date") + "|" + rs.getString("type_trade") + "|" + rs.getString("amount"));
+						rs.getDate("trade_date") + "+|" + rs.getString("type_trade") + "|" + rs.getString("amount"));
 			}
 
 		} catch (SQLException e) {
@@ -128,18 +129,20 @@ public class Database {
 			ps = conn.prepareCall("{call getTrade_date_recent(?)}");
 			// truyền giá trị cho các tham sô
 			ps.setInt(1, accId);
-			Date date = new Date();
-			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-			formatter = new SimpleDateFormat("dd-M-yyyy");
+			// SimpleDateFormat day = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat day = new SimpleDateFormat("dd-MM-yyyy ");
+			SimpleDateFormat time = new SimpleDateFormat("hh:mm");
 
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {// nếu có dữ liệu
-				System.out.println("Loại giao dịch: " + rs.getString("type_trade") + "\n" + "Số giao dịch: "
-						+ rs.getInt("Trade_History_id") + "\n" + "Thời gian giao dịch: " + formatter.format(rs.getDate("trade_date"))
-						+ "\n" + "Số tiền giao dịch: " + rs.getInt("amount"));
+				System.out.println("\n      Hình thức giao dịch: " + rs.getString("type_trade") + "     Mã giao dịch: "
+						+ rs.getInt("Trade_History_id") + "\n" + 
+						"\n      Ngày:                "+ day.format(java.util.Calendar.getInstance().getTime()) + "  Giờ:          "+ time.format(java.util.Calendar.getInstance().getTime()) + 
+						"\n" + "\n      Số tiền giao dịch:   "+ format_money(rs.getLong("amount")));
 
 			}
+
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -222,8 +225,8 @@ public class Database {
 			ps = conn.prepareCall("{call getCustomerInfo()}");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {// nếu có dữ liệu
-				System.out.println(rs.getInt("Account_id") + "|" + rs.getString("AccountNumber") + " | "
-						+ rs.getString("AccountName") + "|" + rs.getString("Phone"));
+				System.out.println(rs.getInt("Account_id") + "+" + rs.getString("AccountNumber") + " + "
+						+ rs.getString("AccountName") + "+" + rs.getString("Phone"));
 
 			}
 
@@ -388,6 +391,19 @@ public class Database {
 			e.printStackTrace();
 			return "";
 		}
+	}
+
+	public static String format_money(long tien) {
+
+		Long money = tien;
+		Locale localeVN = new Locale("vi", "VN");
+		NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+		String money_format = currencyVN.format(money);
+		return money_format;
+
+
+
+		
 	}
 
 }

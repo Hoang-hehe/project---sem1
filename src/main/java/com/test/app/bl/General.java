@@ -9,7 +9,7 @@ import java.util.Scanner;
 import com.test.app.dal.Database;
 
 public class General {
-    static Scanner input = new Scanner(System.in);
+    public Scanner input = new Scanner(System.in);
     private static int ID_login_now;
 
     public static int getID_login_now() {
@@ -40,9 +40,9 @@ public class General {
         }
     }
 
-    public static String format_money(int total) {
+    public static String format_money(long l) {
 
-        Integer money = total;
+        long money = l;
         Locale localeVN = new Locale("vi", "VN");
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         String money_format = currencyVN.format(money);

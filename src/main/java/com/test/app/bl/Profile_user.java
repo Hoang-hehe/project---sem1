@@ -14,7 +14,7 @@ public class Profile_user extends General {
 
         db.getInfoByID(getID_login_now());
 
-        Integer money = db.getBalance(getID_login_now());
+        long money =  db.getBalance(getID_login_now());
         Locale localeVN = new Locale("vi", "VN");
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         String money_format = currencyVN.format(money);
