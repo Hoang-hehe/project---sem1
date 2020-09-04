@@ -19,14 +19,14 @@ public class mainMenu extends General {
     public static Invoice bill = new Invoice();
     public static String AccountNumber = "";
     public static int accountType = 0;
-    public static int max_transaction = 0;
+    public static long max_transaction = 0;
     public static long fees = 1100;
 
     public static void first_login() throws SQLException, InterruptedException {
         clrscr();
 
-        boolean loop = false;
-        boolean loop2 = false;
+        boolean check1 = false;
+        boolean check2 = false;
 
         String password;
         // int login;
@@ -35,13 +35,14 @@ public class mainMenu extends General {
         System.out.println("---------------------------------------------------------------------");
         System.out.println("Chào mừng đến với Ngân Hàng đầu tư và phát triển Bốc Bát Họ Bank (BBH)");
         System.out.println("---------------------------------------------------------------------");
-        while (loop != true) {
+        while (check1 != true) {
             System.out.println("Nhập ID: ");
             AccountNumber = input.nextLine();
             if (lg.first_log(AccountNumber) == 1) {
                 clrscr();
                 System.out.println("---------------------------------------------------------------------");
                 System.out.println("Chào mừng bạn trở lại: " + lg.getName(AccountNumber));
+
                 if (lg.checkActive(AccountNumber) == 0) {
                     System.out.println("Rất tiếc tài khoản của bạn đã bị khoá ");
                     System.out.println("Liên hệ admin để có thể tiếp tục sử dụng tài khoản");
@@ -49,19 +50,19 @@ public class mainMenu extends General {
 
                 }
                 System.out.println("---------------------------------------------------------------------");
-                loop = true;
+                check1 = true;
             } else {
                 System.out.println("Không phát hiện ID trong hệ thống! Mời nhập lại(enter để tiếp tục)");
                 input.nextLine();
                 clrscr();
-                loop = false;
+                check1 = false;
             }
 
         }
-        while (loop2 != true) {
+        while (check2 != true) {
             password = hide_pass();
-            loop2 = lg.session_login(AccountNumber, password);
-            if (loop2 == false) {
+            check2 = lg.session_login(AccountNumber, password);
+            if (check2 == false) {
                 clrscr();
                 System.out.println("Số lần nhập sai: " + lg.getCountLogin());
                 if (lg.getCountLogin() > 3) {
@@ -70,6 +71,10 @@ public class mainMenu extends General {
                     System.exit(0);
                 }
             }
+            Profile_user pr = new Profile_user();
+            pr.set_type_account(getID_login_now());
+            accountType = db.getAccountTypeID(getID_login_now());
+
             System.out.println("---------------------------------------------------------------------");
 
         }
@@ -201,7 +206,8 @@ public class mainMenu extends General {
                     System.out.println("Mời nhập số tiền muốn rút (bội số của 100.000)");
                     money_want_withdraw = Integer.parseInt(input.nextLine());
                     if (money_want_withdraw > max_transaction) {
-                        System.out.println("Bạn chỉ có thể rút tối đa " + max_transaction + " một lần rút");
+                        System.out
+                                .println("Bạn chỉ có thể rút tối đa " + format_money(max_transaction) + " một lần rút");
                         input.nextLine();
 
                     } else {
@@ -240,6 +246,7 @@ public class mainMenu extends General {
         Transfer trs = new Transfer();
         try {
             while (true) {
+                clrscr();
                 System.out.println("Nhập ID muốn chuyển khoản");
                 transfer_toID = input.nextLine();
                 if (trs.check_accountNumber(transfer_toID) == 1 && transfer_toID.equals(AccountNumber) == false) {
@@ -260,7 +267,6 @@ public class mainMenu extends General {
                                 if (trs.run(transfer_toID, money) == 1) {
                                     System.out.println("Chuyển khoản thành công");
                                     bill.front_transfer(getID_login_now(), transfer_toID);
-
                                     input.nextLine();
                                     break;
 
@@ -278,6 +284,7 @@ public class mainMenu extends General {
                     break;
 
                 } else {
+                    clrscr();
                     System.out.println("Không thể thực hiện chuyển tiền với tài khoản này");
                     System.out.println("1. Nhập lại ID");
                     System.out.println("2. Trở về menu chinhs");
@@ -306,7 +313,6 @@ public class mainMenu extends General {
 
         while (true) {
             clrscr();
-            Profile_user pr = new Profile_user();
 
             String choice;
             System.out.println("---------------------------------------------------------------------");
@@ -321,11 +327,8 @@ public class mainMenu extends General {
             switch (choice) {
                 case "1":
                     clrscr();
-                    pr.set_type_account(getID_login_now());
+                    Profile_user pr = new Profile_user();
                     pr.info();
-                    accountType = db.getAccountTypeID(getID_login_now());
-
-                    System.out.println("loại account: " + db.getAccountTypeID(getID_login_now()));
                     if (pr.get_type_account(getID_login_now()) == 1) {
                         System.out.println("Cấp độ tài khoản: Vàng");
                         System.out.println("Ưu đãi: Được rút tối đa lên đến 20tr/lần, không giới hạn giao dịch");

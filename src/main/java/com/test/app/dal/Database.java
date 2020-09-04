@@ -137,12 +137,12 @@ public class Database {
 
 			while (rs.next()) {// nếu có dữ liệu
 				System.out.println("\n      Hình thức giao dịch: " + rs.getString("type_trade") + "     Mã giao dịch: "
-						+ rs.getInt("Trade_History_id") + "\n" + 
-						"\n      Ngày:                "+ day.format(java.util.Calendar.getInstance().getTime()) + "  Giờ:          "+ time.format(java.util.Calendar.getInstance().getTime()) + 
-						"\n" + "\n      Số tiền giao dịch:   "+ format_money(rs.getLong("amount")));
+						+ rs.getInt("Trade_History_id") + "\n" + "\n      Ngày:                "
+						+ day.format(java.util.Calendar.getInstance().getTime()) + "  Giờ:          "
+						+ time.format(java.util.Calendar.getInstance().getTime()) + "\n"
+						+ "\n      Số tiền giao dịch:   " + format_money(rs.getLong("amount")));
 
 			}
-
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -400,10 +400,27 @@ public class Database {
 		NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
 		String money_format = currencyVN.format(money);
 		return money_format;
+	}
 
+	public int addCard(String code, long value_card, int is_active) {
+		try {
 
+			ps = conn.prepareCall("{call addCard(?,?,?)}");
+			ps.setString(1, code);
+			ps.setLong(2, value_card);
+			ps.setInt(3, is_active);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {// nếu có dữ liệu
+				return rs.getInt("result");
 
-		
+			}
+			return -1;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -2;
+		}
 	}
 
 }
