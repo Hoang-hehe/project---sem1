@@ -114,6 +114,8 @@ public class Database {
 			while (rs.next()) {// nếu có dữ liệu
 				System.out.println(
 						rs.getDate("trade_date") + "+|" + rs.getString("type_trade") + "|" + rs.getString("amount"));
+
+						
 			}
 
 		} catch (SQLException e) {
@@ -140,7 +142,7 @@ public class Database {
 						+ rs.getInt("Trade_History_id") + "\n" + "\n      Ngày:                "
 						+ day.format(java.util.Calendar.getInstance().getTime()) + "  Giờ:          "
 						+ time.format(java.util.Calendar.getInstance().getTime()) + "\n"
-						+ "\n      Số tiền giao dịch:   " + format_money(rs.getLong("amount")));
+						+ "\n      Số tiền giao dịch:   " + format_money(rs.getLong("amount")-1100));
 
 			}
 
@@ -287,7 +289,7 @@ public class Database {
 
 				System.out.println("ID tài khoản: " + rs.getString("AccountNumber"));
 				System.out.println("Tên chủ tài khoản: " + rs.getString("AccountName"));
-				System.out.println("Số điện thoại: " + rs.getString("Phone"));
+				// System.out.println("Số điện thoại: " + rs.getString("Phone"));
 
 			}
 

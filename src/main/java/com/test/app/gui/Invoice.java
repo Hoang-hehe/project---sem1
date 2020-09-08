@@ -39,7 +39,6 @@ public class Invoice extends General {
 
         }
         else{
-            System.out.println("quay trở lại");
             
         }
 
