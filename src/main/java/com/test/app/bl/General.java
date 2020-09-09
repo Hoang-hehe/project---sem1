@@ -6,12 +6,14 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Scanner;
 
-import com.test.app.dal.Database;
 
 public class General {
     public Scanner input = new Scanner(System.in);
     private static int ID_login_now;
-
+    public General(){}
+    public General(int id ){
+       ID_login_now = id;
+    }
     public static int getID_login_now() {
         return ID_login_now;
     }
@@ -23,7 +25,7 @@ public class General {
     public static String hide_pass() {
         String password = "";
         Console console = System.console();
-        char[] pass = console.readPassword("Nhập password:     ");
+        char[] pass = console.readPassword("Enter PIN:     ");
         for (Character c : pass) {
             password += c.toString();
         }

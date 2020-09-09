@@ -22,7 +22,7 @@ public class mainMenu extends General {
     public static int accountType = 0;
     public static long max_transaction = 0;
     public static long fees = 1100;
-    public static long money_in_ATM = 10000000;
+    public static long money_in_ATM = 100000000;
 
     public static void menu_transaction() throws SQLException, InterruptedException {
 
@@ -31,21 +31,21 @@ public class mainMenu extends General {
             Profile_user pr = new Profile_user();
             String choice;
             System.out.println("\n------------------------------------------------------------------");
-            System.out.println("Ngân hàng đầu tư và vay tiền  | BHB                               ");
+            System.out.println("Investment banking and borrowing money | BHB                               ");
             System.out.println("------------------------------------------------------------------");
-            System.out.printf("%45s%-20s\n", "Vui lòng chọn giao dịch", "");
+            System.out.printf("%45s%-20s\n", "Please select transaction", "");
             System.out.println("------------------------------------------------------------------");
             System.out.printf("%-40s%s\n", " -------------------------", "-------------------------");
-            System.out.printf("%-40s%-12s\n", "|1. Rút tiền             /|", "|2. Chuyển khoản        /|");
+            System.out.printf("%-40s%-12s\n", "|1. Withdraw cash       /|", "|2. Transfer           /|");
             System.out.printf("%-40s%s\n", " -------------------------", "-------------------------");
             System.out.printf("%-40s%s\n", " -------------------------", "-------------------------");
-            System.out.printf("%-40s%-12s\n", "|3. Xem số dư            /|", "|4. In sao kê           /|");
+            System.out.printf("%-40s%-12s\n", "|3. Check balance       /|", "|4. Deposit cash       /|");
             System.out.printf("%-40s%s\n", " -------------------------", "-------------------------");
             System.out.printf("%-40s%s\n", " -------------------------", "-------------------------");
-            System.out.printf("%-40s%-12s\n", "|5. Đổi mã PIN           /|", "|6. Thoát               /|");
+            System.out.printf("%-40s%-12s\n", "|5. Change PIN          /|", "|6. Exit               /|");
             System.out.printf("%-40s%s\n", " -------------------------", "-------------------------");
             System.out.println("------------------------------------------------------------------");
-            System.out.println("#Chọn: ");
+            System.out.println("#Choice: ");
             choice = input.nextLine();
             switch (choice) {
                 case "1":
@@ -62,24 +62,24 @@ public class mainMenu extends General {
 
                     pr.info();
                     if (pr.get_type_account(getID_login_now()) == 1) {
-                        System.out.println("Cấp độ tài khoản: Vàng");
-                        System.out.println("Ưu đãi: Được rút tối đa lên đến 20tr/lần, không giới hạn giao dịch");
+                        System.out.println("Account level: GOLD");
+                        System.out.println("Offer: Can withdraw up to 20 million VND / time, no limit transactions");
                         max_transaction = 20000000;
                     } else if (pr.get_type_account(getID_login_now()) == 2) {
-                        System.out.println("Cấp độ tài khoản: Bạc");
-                        System.out.println("Cần thêm " + format_money(100000000 - db.getBalance(getID_login_now()))
-                                + " để nâng lên cấp độ Vàng");
+                        System.out.println("Account level: SILVER");
+                        System.out.println("It takes an extra  " + format_money(100000000 - db.getBalance(getID_login_now()))
+                                + " to level up GOLD");
                         System.out.println(
-                                "Uu đãi cấp độ Bạc: Được rút tối đa 10tr/lần, có thể giao dịch tối đa 100tr/ngày");
+                                "Silver level incentives: Can withdraw up to 10 million / time, can withdraw to 100 million / day");
                         max_transaction = 10000000;
                     } else if (pr.get_type_account(getID_login_now()) == 3) {
-                        System.out.println("Cấp độ tài khoản: Đồng");
-                        System.out.println("Cần thêm " + format_money(50000000 - db.getBalance(getID_login_now()))
-                                + " để nâng lên cấp độ Bạc và nhận thêm ưu đãi ");
-                        System.out.println("Hiện tại bạn có thể rút tối đa 5tr/lần và giao dịch tối đa 50tr/ngày");
+                        System.out.println("Account level: BRONZE");
+                        System.out.println("It takes an extra " + format_money(50000000 - db.getBalance(getID_login_now()))
+                                + " to level up SILVER ");
+                        System.out.println("Currently you can withdraw up to 5 million VND / time and withdraw up to 50 million VND / day");
                         max_transaction = 5000000;
                     }
-                    System.out.println("Enter để quay lại menu chính...");
+                    System.out.println("Enter to return main menu...");
                     input.nextLine();
                     // choice_profile();
                     break;
@@ -92,29 +92,34 @@ public class mainMenu extends General {
                     String new_pass2 = "";
                     String old_pass = "";
                     clrscr();
-                    System.out.println("Mời nhập mã PIN cũ:");
                     old_pass = hide_pass(); // check mật khẩu cũ
                     if (old_pass.equals(pr.checkPassFromID((getID_login_now())))) {
-
-                        System.out.println("Mời nhập mã PIN mới:");
+                        clrscr();
+                        System.out.println("Enter new PIN");
                         while (true) {
                             new_pass = hide_pass();
                             if (valid.validate(new_pass) == true) {
-                                System.out.println("Xác nhập mã PIN mới: ");
+                                clrscr();
+                                System.out.println("Confirm password: ");
                                 new_pass2 = hide_pass();
                                 if (new_pass2 == new_pass) {
                                     pr.update(new_pass);
-                                    System.out.println("Cập nhật mã PIN thành công, enter để trở về menu chính");
+                                    System.out.println("PIN successfully updated, enter to return to the main menu");
+                                }
+                                else{
+                                    System.out.println("Invalid, return to the main menu...");
+                                    Thread.sleep(1000);
                                 }
 
                             } else {
-                                System.out.println("Không hợp lệ!");
-                                input.nextLine();
+                                System.out.println("Invalid!");
+                                System.out.println("exit to main menu...");
+                                Thread.sleep(1000);
                             }
                             break;
                         }
                     } else {
-                        System.out.println("Nhập sai mật khẩu cũ, enter để quay lại");
+                        System.out.println("Enter wrong old password, enter to go back...");
                         input.nextLine();
                     }
                     break;
@@ -143,27 +148,27 @@ public class mainMenu extends General {
         System.out.println("|   Group 2                |");
         System.out.println("----------------------------");
         System.out.println("---------------------------------------------------------------------");
-        System.out.println("Chào mừng đến với Ngân Hàng đầu tư và phát triển Bốc Bát Họ Bank (BBH)");
+        System.out.println("Welcome to investment banking and borrowing money: BAT HO BANK (BHB)");
         // System.out.println("Version ATM : 0001");
         System.out.println("---------------------------------------------------------------------");
         while (check1 != true) {
-            System.out.println("Nhập ID: ");
+            System.out.println("Import ID: ");
             AccountNumber = input.nextLine();
             if (lg.first_log(AccountNumber) == 1) {
                 clrscr();
                 System.out.println("---------------------------------------------------------------------");
-                System.out.println("Chào mừng bạn trở lại: " + lg.getName(AccountNumber));
+                System.out.println("Welcome back: " + lg.getName(AccountNumber));
 
                 if (lg.checkActive(AccountNumber) == 0) {
-                    System.out.println("Rất tiếc tài khoản của bạn đã bị khoá ");
-                    System.out.println("Liên hệ admin để có thể tiếp tục sử dụng tài khoản");
+                    System.out.println("Sorry your account has been locked ");
+                    System.out.println("Contact the admin to continue using the account");
                     System.exit(0);
 
                 }
                 System.out.println("---------------------------------------------------------------------");
                 check1 = true;
             } else {
-                System.out.println("Không phát hiện ID trong hệ thống! Mời nhập lại(enter để tiếp tục)");
+                System.out.println("ID not detected in the system! Please re-enter (enter to continue)");
                 input.nextLine();
                 clrscr();
                 check1 = false;
@@ -175,9 +180,10 @@ public class mainMenu extends General {
             check2 = lg.session_login(AccountNumber, password);
             if (check2 == false) {
                 clrscr();
-                System.out.println("Số lần nhập sai: " + lg.getCountLogin());
+                System.out.println("Number of wrong entries: " + lg.getCountLogin());
                 if (lg.getCountLogin() > 3) {
-                    System.out.println("Bạn đã bị khoá mẹ tài khoản, hack với chúng tôi à?");
+                    System.out.println("You have been deactivated");
+                    System.out.println("End of login session...");
                     lg.deactive(AccountNumber);
                     System.exit(0);
                 }
@@ -262,108 +268,111 @@ public class mainMenu extends General {
             System.out.println("1. 500.000đ");
             System.out.println("2. 1.000.000đ");
             System.out.println("3. 2.000.000đ");
-            System.out.println("4. Số khác ( Bội số của 10.000 )");
+            System.out.println("4. Other ( Multiples of 500.000 VND )");
             System.out.println("5. Main menu");
             System.out.println("---------------------------------------------------------------------");
-            System.out.println("#chọn: ");
+            System.out.println("#Choice: ");
             choice = input.nextLine();
             switch (choice) {
                 case "1":
-
+                clrscr();
                     money_want_withdraw = 500000;
                     if (money_want_withdraw > money_in_ATM) {
-                        System.out.println("Rất xin lỗi! ATM tạm thời không thể đáp ứng yêu cầu rút tiền! ");
+                        System.out.println("So sorry! The ATM is temporarily unable to respond to withdrawal request! ");
                         menu_transaction();
                     } else {
-                        if (wd.run(money_want_withdraw + 1100) == 1) {
-                            System.out.println("Rút thành công!");
+                        if (wd.run(money_want_withdraw) == 1) {
+                            System.out.println("Successful withdrawal!");
                             Thread.sleep(1000);
                             bill.front(getID_login_now());
                             // db.trade(getID_login_now(), fees, "T");
                             // db.trade(10, fees, "G");
                             money_in_ATM -= money_want_withdraw;
-                            System.out.println("Nhấn phím bất kì để quay trở lại");
+                            System.out.println("Enter to go back...");
                             input.nextLine();
                             break;
                         } else {
-                            System.out.println("Tài khoản không đủ số dư khả dụng");
+                            System.out.println("The account does not have sufficient free balance");
                             Thread.sleep(1000);
                         }
                         break;
                     }
 
-                case "2":
+                case "2":clrscr();
                     money_want_withdraw = 1000000;
                     if (money_want_withdraw > money_in_ATM) {
-                        System.out.println("Rất xin lỗi! ATM tạm thời không thể đáp ứng yêu cầu rút tiền! ");
+                        System.out.println("So sorry! The ATM is temporarily unable to respond to withdrawal request! ");
                         menu_transaction();
 
                     } else {
-                        if (wd.run(money_want_withdraw + 1100) == 1) {
-                            System.out.println("Rút thành công!");
+                        if (wd.run(money_want_withdraw) == 1) {
+                            System.out.println("Successful withdrawal!");
                             Thread.sleep(1000);
                             bill.front(getID_login_now());
                             // db.trade(getID_login_now(), fees, "T");
                             // db.trade(10, fees, "G");
                             money_in_ATM -= money_want_withdraw;
-                            System.out.println("Nhấn phím bất kì để quay trở lại");
+                            System.out.println("Enter to go back...");
                             input.nextLine();
                             break;
                         } else {
-                            System.out.println("Lỗi! số tiền rút không khả dụng");
+                            System.out.println("The account does not have sufficient free balance");
                             Thread.sleep(1000);
                         }
                         break;
                     }
 
-                case "3":
-                    money_want_withdraw = 2000000;
-                    if (money_want_withdraw > money_in_ATM) {
-                        System.out.println("Rất xin lỗi! ATM tạm thời không thể đáp ứng yêu cầu rút tiền! ");
-                        menu_transaction();
+                case "3":clrscr();
+                money_want_withdraw = 2000000;
+                if (money_want_withdraw > money_in_ATM) {
+                    System.out.println("So sorry! The ATM is temporarily unable to respond to withdrawal request! ");
+                    menu_transaction();
+
+                } else {
+                    if (wd.run(money_want_withdraw) == 1) {
+                        System.out.println("Successful withdrawal!");
+                        Thread.sleep(1000);
+                        bill.front(getID_login_now());
+                        // db.trade(getID_login_now(), fees, "T");
+                        // db.trade(10, fees, "G");
+                        money_in_ATM -= money_want_withdraw;
+                        System.out.println("Enter to go back...");
+                        input.nextLine();
+                        break;
                     } else {
-                        if (wd.run(money_want_withdraw + 1100) == 1) {
-                            System.out.println("Rút thành công!");
-                            Thread.sleep(1000);
-                            bill.front(getID_login_now());
-                            // db.trade(getID_login_now(), fees, "T");
-                            // db.trade(10, fees, "G");
-                            money_in_ATM -= money_want_withdraw;
-                            System.out.println("Nhấn phím bất kì để quay trở lại");
-                            input.nextLine();
-                            break;
-
-                        }
-                        break;
+                        System.out.println("The account does not have sufficient free balance");
+                        Thread.sleep(1000);
                     }
+                    break;
+                }
 
-                case "4":
+                case "4":clrscr();
                     try {
                         money_want_withdraw = 0;
-                        System.out.println("Mời nhập số tiền muốn rút (bội số của 500.000)");
+                        System.out.println("Please enter the amount you want to withdraw (multiple of 500.000 VND).");
                         money_want_withdraw = Integer.parseInt(input.nextLine());
                         if (money_want_withdraw > money_in_ATM) {
-                            System.out.println("Rất xin lỗi! ATM tạm thời không thể đáp ứng yêu cầu rút tiền! ");
+                            System.out.println("So sorry! The ATM is temporarily unable to respond to withdrawal request! ");
                             input.nextLine();
                             menu_transaction();
                         } else {
                             if (money_want_withdraw > max_transaction) {
                                 System.out.println(
-                                        "Bạn chỉ có thể rút tối đa " + format_money(max_transaction) + " một lần rút");
+                                        "You can only withdraw up to " + format_money(max_transaction) + " per withdrawal");
                                 input.nextLine();
 
                             } else {
-                                if (money_want_withdraw % 100000 == 0 && wd.run(money_want_withdraw + 1100) == 1) {
-                                    System.out.println("Rút thành công");
+                                if (money_want_withdraw % 100000 == 0 && wd.run(money_want_withdraw) == 1) {
+                                    System.out.println("Withdraw successfully");
                                     bill.front(getID_login_now());
                                     // db.trade(getID_login_now(), fees, "T");
                                     // db.trade(10, fees, "G");
                                     money_in_ATM -= money_want_withdraw;
-                                    System.out.println("Nhấn phím bất kì để quay trở lại");
+                                    System.out.println("Enter to go back...");
                                     input.nextLine();
                                     break;
                                 } else {
-                                    System.out.println("Lỗi! số tiền rút không khả dụng");
+                                    System.out.println("Error! Withdrawal amount is not available");
                                     Thread.sleep(1000);
                                 }
 
@@ -371,7 +380,7 @@ public class mainMenu extends General {
                             }
                         }
                     } catch (NumberFormatException e) {
-                        System.out.println("Nhập không hợp lệ!");
+                        System.out.println("Enter is not valid!");
                         input.nextLine();
                     }
 
@@ -396,14 +405,14 @@ public class mainMenu extends General {
         try {
             label1: while (true) {
                 clrscr();
-                System.out.println("Nhập ID muốn chuyển khoản");
+                System.out.println("Enter the ID you want to transfer");
                 transfer_toID = input.nextLine();
                 if (trs.check_accountNumber(transfer_toID) == 1 && transfer_toID.equals(AccountNumber) == false) {
                     while (true) {
-                        System.out.println("Nhập số tiền: ");
+                        System.out.println("Enter amount: ");
                         money = Long.parseLong(input.nextLine());
                         if (money > 0 && money < db.getBalance(getID_login_now()) - 50000) {
-                            System.out.println("Nhập mật khẩu xác nhận:");
+                            System.out.println("Enter your PIN to confirm:");
                             password = hide_pass();
                             if (lg.check_password(AccountNumber, password) == 1) {
 
@@ -414,7 +423,7 @@ public class mainMenu extends General {
                                 // }
 
                                 if (trs.run(transfer_toID, money) == 1) {
-                                    System.out.println("Chuyển khoản thành công");
+                                    System.out.println("Transfer successfully");
                                     bill.front_transfer(getID_login_now(), transfer_toID);
                                     input.nextLine();
                                     break;
@@ -422,13 +431,13 @@ public class mainMenu extends General {
                                 }
 
                             } else {
-                                System.out.println("Nhập sai mật khẩu, kết thúc phiên");
+                                System.out.println("Enter the wrong password, end the session");
                                 input.nextLine();
                                 break label1;
                             }
 
                         } else {
-                            System.out.println("Không thể giao dịch số tiền này");
+                            System.out.println("This amount cannot be traded");
                             break;
 
                         }
@@ -437,9 +446,9 @@ public class mainMenu extends General {
 
                 } else {
                     clrscr();
-                    System.out.println("Không thể thực hiện chuyển tiền với tài khoản này");
-                    System.out.println("1. Nhập lại ID");
-                    System.out.println("2. Trở về menu chinhs");
+                    System.out.println("Transfer cannot be made with this ID");
+                    System.out.println("1. Re-enter ID");
+                    System.out.println("2. Return to the main menu");
                     System.out.println("#chọn: ");
                     choice = input.nextLine();
                     switch (choice) {
@@ -456,8 +465,8 @@ public class mainMenu extends General {
             }
 
         } catch (java.lang.NumberFormatException e) {
-            System.out.println("Nhập không hợp lệ!");
-            System.out.println("Enter để trở về menu chính");
+            System.out.println("Enter is not valid!");
+            System.out.println("Enter to return to the main menu");
             input.nextLine();
         }
     }

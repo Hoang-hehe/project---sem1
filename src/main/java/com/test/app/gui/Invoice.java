@@ -8,7 +8,7 @@ public class Invoice extends General {
 
     
     public int choice() {
-        System.out.println("Bạn có muốn in hoá đơn(y/n):");
+        System.out.println("Do you want to print invoice (y / n):");
         String choice_printf;
         choice_printf = input.nextLine();
         switch (choice_printf) {
@@ -26,15 +26,15 @@ public class Invoice extends General {
         if (choice() == 1) {
             clrscr();
             System.out.println("+-----------------------------------------------------------+");
-            System.out.println("+       NGÂN HÀNG TMCP ĐẦU TƯ VÀ VAY VỐN VIỆT NAM (BHB)     +");
+            System.out.println("+       Investment banking and borrowing money | BHB     +");
             System.out.println("+-----------------------------------------------------------+");
             db.getTrade_date_recent(getID_login_now());
             // db.getTrade_date_recent(1);
-            System.out.println("\n      Số tài khoản:        " + getID_login_now());
+            System.out.println("\n      Account number:        " + getID_login_now());
             // System.out.println("\n      Số dư tài khoản:     " + db.getBalance(getID_login_now()));
-            System.out.println("\n      Số dư tài khoản:     " + format_money(db.getBalance(getID_login_now())));
+            System.out.println("\n      Account balance:       " + format_money(db.getBalance(getID_login_now())));
             // System.out.println("Số dư tài khoản: " + db.getBalance(1));
-            System.out.println("\n      Phí thực hiện:       1.100 VND");
+            System.out.println("\n      Implementation costs:  Free");
             System.out.println("\n+-----------------------------------------------------------+");
 
         }
@@ -48,15 +48,15 @@ public class Invoice extends General {
         if (choice() == 1) {
             clrscr();
             System.out.println("+-----------------------------------------------------------+");
-            System.out.println("+       NGÂN HÀNG TMCP ĐẦU TƯ VÀ VAY VỐN VIỆT NAM (BHB)     +");
+            System.out.println("+       Investment banking and borrowing money | BHB     +");
             System.out.println("+-----------------------------------------------------------+");
             db.getTrade_date_recent(getID_login_now());
-            System.out.println("\n      Tài khoản thụ hưởng: "+ account);
-            System.out.println("\n      Số tài khoản:        " + getID_login_now());
+            System.out.println("\n      Beneficiary account:   "+ account);
+            System.out.println("\n      Account number:        " + getID_login_now());
             // System.out.println("\n      Số dư tài khoản:     " + db.getBalance(getID_login_now()));
-            System.out.println("\n      Số dư tài khoản:     " + format_money(db.getBalance(getID_login_now())));
+            System.out.println("\n      Account balance:       " + format_money(db.getBalance(getID_login_now())));
             // System.out.println("Số dư tài khoản: " + db.getBalance(1));
-            System.out.println("\n      Phí thực hiện:       1.100 VND");
+            System.out.println("\n      Implementation costs:  Free");
             System.out.println("\n+-----------------------------------------------------------+");
 
         }

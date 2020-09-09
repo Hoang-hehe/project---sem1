@@ -18,7 +18,7 @@ public class Profile_user extends General {
         Locale localeVN = new Locale("vi", "VN");
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         String money_format = currencyVN.format(money);
-        System.out.println("Số dư trong tài khoản: " + money_format);
+        System.out.println("Balance: " + money_format);
 
     }
 

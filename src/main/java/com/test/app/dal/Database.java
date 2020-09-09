@@ -112,8 +112,12 @@ public class Database {
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {// nếu có dữ liệu
-				System.out.println(
+				if(rs.getString("type_trade").equals("Chuyển tiền")!=true){
+					System.out.println(
 						rs.getDate("trade_date") + "+|" + rs.getString("type_trade") + "|" + rs.getString("amount"));
+
+				}
+				
 
 						
 			}
@@ -138,11 +142,11 @@ public class Database {
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {// nếu có dữ liệu
-				System.out.println("\n      Hình thức giao dịch: " + rs.getString("type_trade") + "     Mã giao dịch: "
-						+ rs.getInt("Trade_History_id") + "\n" + "\n      Ngày:                "
-						+ day.format(java.util.Calendar.getInstance().getTime()) + "  Giờ:          "
+				System.out.println("\n      Transaction type:      " + rs.getString("type_trade") + "        Trading code: "
+						+ rs.getInt("Trade_History_id") + "\n" + "\n      Day:                   "
+						+ day.format(java.util.Calendar.getInstance().getTime()) + "     Time:         "
 						+ time.format(java.util.Calendar.getInstance().getTime()) + "\n"
-						+ "\n      Số tiền giao dịch:   " + format_money(rs.getLong("amount")-1100));
+						+ "\n      Transaction amount:    " + format_money(rs.getLong("amount")));
 
 			}
 
@@ -287,8 +291,8 @@ public class Database {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {// nếu có dữ liệu
 
-				System.out.println("ID tài khoản: " + rs.getString("AccountNumber"));
-				System.out.println("Tên chủ tài khoản: " + rs.getString("AccountName"));
+				System.out.println("ID account: " + rs.getString("AccountNumber"));
+				System.out.println("Name: " + rs.getString("AccountName"));
 				// System.out.println("Số điện thoại: " + rs.getString("Phone"));
 
 			}
